@@ -7,7 +7,7 @@ pygame.init()
 window = pygame.display.set_mode((800, 600))
 
 # set the title of the screen and the icon
-title = pygame.display.set_caption("Car Game?")
+title = pygame.display.set_caption("Vroom Zoom")
 # Icons made by https://www.flaticon.com/authors/eucalyp
 icon = pygame.image.load('car-2.png')
 pygame.display.set_icon(icon)
