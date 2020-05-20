@@ -45,6 +45,12 @@ while running:
 
     # update player x
     playerX += playerX_change
+    # boundaries
+    if playerX <= 200:
+        playerX = 200
+    if playerX >= 536:
+        playerX = 536
+
     # calls the player data
     player(playerX, playerY)
     # updates the game so changes are seen
