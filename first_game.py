@@ -1,5 +1,13 @@
 import pygame
+import random
+import math
 from pygame_functions import *
+
+
+def main():
+    # call needed methods
+    game_intro()
+
 
 # initialize pygame and fonts
 pygame.init()
@@ -50,6 +58,15 @@ def game_intro():
                 pygame.quit()
 
 
+# find out if there is a collision
+def is_collision(objectX, objectY, playerX, playerY):
+    distance = math.sqrt((math.pow(objectX - playerX, 2)) + (math.pow(playerY - objectY, 2)))
+    if distance < 27:
+        return True
+    else:
+        return False
+
+
 def run_game():
     # variables for player
     playerX = 370
@@ -59,6 +76,7 @@ def run_game():
     # variables for objects, TODO: make them spawn random, make them do damage
     objectX = 225
     objectY = 0
+    objectY_change = 0
     # run the window until it's told to exit
     running = True
     while running:
@@ -80,6 +98,7 @@ def run_game():
 
         # this will spawn cars to avoid
         objectY += 5
+
         # update player x
         playerX += playerX_change
         # boundaries
@@ -87,6 +106,12 @@ def run_game():
             playerX = 200
         if playerX >= 536:
             playerX = 536
+
+        # checks if there is a collision and if there is, restart from intro
+        collision = is_collision(objectX, objectY, playerX, playerY)
+        if collision:
+            game_intro()
+            break
 
         # calls the player data
         player(playerX, playerY)
@@ -96,5 +121,5 @@ def run_game():
         pygame.display.update()
 
 
-# call needed methods
-game_intro()
+if __name__ == '__main__':
+    main()
