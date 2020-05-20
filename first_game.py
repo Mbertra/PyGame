@@ -17,7 +17,10 @@ pygame.display.set_icon(icon)
 # Player
 player_img = pygame.image.load('transport.png')
 
-# The moving road will start with spacebar
+# temporary objects image
+# TODO: update image add other objects
+object_image = player_img
+
 # Icons made by www.flaticon.com/authors/dinosoftlabs
 background_img = pygame.image.load('road2.png')
 background_img = pygame.transform.scale(background_img, (400, 800))
@@ -27,9 +30,12 @@ def player(x, y):
     window.blit(player_img, (x, y))
 
 
+def objects(x, y):
+    window.blit(object_image, (x, y))
+
+
 # displays an intro screen for the game
 def game_intro():
-
     intro = True
     while intro:
         for event in pygame.event.get():
@@ -45,9 +51,14 @@ def game_intro():
 
 
 def run_game():
+    # variables for player
     playerX = 370
     playerY = 480
     playerX_change = 0
+
+    # variables for objects, TODO: make them spawn random, make them do damage
+    objectX = 225
+    objectY = 0
     # run the window until it's told to exit
     running = True
     while running:
@@ -67,6 +78,8 @@ def run_game():
                     playerX_change = 0
         window.blit(background_img, [200, 0])
 
+        # this will spawn cars to avoid
+        objectY += 5
         # update player x
         playerX += playerX_change
         # boundaries
@@ -77,6 +90,8 @@ def run_game():
 
         # calls the player data
         player(playerX, playerY)
+        # calls the objects
+        objects(objectX, objectY)
         # updates the game so changes are seen
         pygame.display.update()
 
