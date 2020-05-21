@@ -138,7 +138,7 @@ def run_game():
         for k in range(len(obstacle_list)):
             collision = is_collision(obstacle_list[k][1], playerY, obstacle_list[k][0], playerX)
             if collision:
-                # ToDo : clear_board()
+                obstacle_list.clear()
                 game_intro()
                 break
         # updates the game so changes are seen
