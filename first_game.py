@@ -44,6 +44,7 @@ def player(x, y):
     window.blit(player_img, (x, y))
 
 
+# spawns obstacles, called from run_game()
 def obstacle():
     # Loop 3 times and add a snow flake in a random x,y position
     for i in range(0, 3):
@@ -125,11 +126,16 @@ def run_game():
         # update players x coordinate
         playerX += playerX_change
 
+        # this is going to be the score just using the length of the list
+        score = str(len(obstacle_list) * 10)
+        score_out = font.render("Score: " + score, False, (255, 255, 255))
+        window.blit(score_out, (0, 0))
+
         # boundaries for player
         if playerX <= 200:
             playerX = 200
-        if playerX >= 536:
-            playerX = 536
+        if playerX >= 460:
+            playerX = 460
 
         # calls the player data
         player(playerX, playerY)
