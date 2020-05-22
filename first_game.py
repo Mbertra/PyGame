@@ -2,6 +2,7 @@ import random
 import sched
 import time
 from pygame_functions import *
+import simpleaudio as sa
 
 
 def main():
@@ -12,6 +13,10 @@ def main():
 # initialize pygame and fonts
 pygame.init()
 font = pygame.font.Font('freesansbold.ttf', 32)
+
+# Sound from https://freesound.org/people/squareal/
+filename = 'crash.wav'
+wave_obj = sa.WaveObject.from_wave_file(filename)
 
 # creates a window with a pixel width of 800x600
 window = pygame.display.set_mode((800, 600))
@@ -25,6 +30,8 @@ pygame.display.set_icon(icon)
 # Icons made by www.flaticon.com/authors/dinosoftlabs
 background_img = pygame.image.load('road2.png')
 background_img = pygame.transform.scale(background_img, (325, 800))
+# image made by https://pixabay.com/users/publicdomainpictures-14/
+background_img2 = pygame.image.load('grass.jpg')
 
 # Player
 player_img = pygame.image.load('transport.png')
@@ -49,7 +56,7 @@ def obstacle():
     # Loop 3 times and add a snow flake in a random x,y position
     for i in range(0, 3):
         # variables for obstacles
-        spawn_cords = [215, 285, 370, 445]
+        spawn_cords = [253, 323, 408, 483]
         num = random.randint(0, 3)
         obstacleX = spawn_cords[num]
         obstacleY = 0
@@ -82,15 +89,27 @@ def is_collision(obstacleY, playerY, obstacleX, playerX):
         return False
 
 
+# ------------Main program loop------------
 def run_game():
-    running = True
     # variables for player
     playerX = 370
     playerY = 480
     playerX_change = 0
 
-    # run the window until it's told to exit
+    # initialize counter
     counter = 0
+
+    # variable im using to set speed the cars fall at
+    x = 20000
+
+    # the speed that the cars move at
+    speed = 1
+
+    # the frequency the cars spawn at
+    spawn_rate = 125
+
+    # run the window until it's told to exit
+    running = True
     while running:
         # sets the background of the game to black for now using R, G , B
         window.fill((0, 0, 0))
@@ -110,18 +129,39 @@ def run_game():
                     playerX_change = 0
 
         # displays the background image
-        window.blit(background_img, [200, 0])
+        window.blit(background_img2, [0, 0])
+        window.blit(background_img, [238, 0])
 
         # this is my way of setting a spawn speed
         counter += 1
-        if counter % 75 == 0 or counter == 1:
+        if counter % spawn_rate == 0 or counter == 1:
             obstacle()
+
+        """   
+         # set the speed to increase per 10 seconds (1px increase)
+         # Also, each time this is true, we will spawn cars at a higher
+         # Frequency
+         """
+        speed_increase = pygame.time.get_ticks()
+        if speed_increase >= x and counter != 1:
+            x += 20000
+            # so that its still playable if you make it this far max speed and spawn rate
+            if spawn_rate > 50:
+                spawn_rate -= 25
+            if speed < 10:
+                speed += 1
+            # reset speed and frequency of spawns if program resets, because of stacks, easiest way
+            reset = len(obstacle_list)
+            print(reset)
+            if reset <= 3:
+                speed = 2
+                spawn_rate = 125
 
         # calls the function to spawn cars and moves the y value of the cars
         for k in range(len(obstacle_list)):
             window.blit(obstacle_image, (obstacle_list[k][0], obstacle_list[k][1]))
             # move the Y position of the car down n pixels
-            obstacle_list[k][1] += 3
+            obstacle_list[k][1] += speed
 
         # update players x coordinate
         playerX += playerX_change
@@ -132,10 +172,10 @@ def run_game():
         window.blit(score_out, (0, 0))
 
         # boundaries for player
-        if playerX <= 200:
-            playerX = 200
-        if playerX >= 460:
-            playerX = 460
+        if playerX <= 245:
+            playerX = 245
+        if playerX >= 600:  # 490
+            playerX = 600
 
         # calls the player data
         player(playerX, playerY)
@@ -144,9 +184,11 @@ def run_game():
         for k in range(len(obstacle_list)):
             collision = is_collision(obstacle_list[k][1], playerY, obstacle_list[k][0], playerX)
             if collision:
+                play_obj = wave_obj.play()
+                running = False
                 obstacle_list.clear()
                 game_intro()
-                break
+
         # updates the game so changes are seen
         pygame.display.flip()
 
