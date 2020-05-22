@@ -174,8 +174,8 @@ def run_game():
         # boundaries for player
         if playerX <= 245:
             playerX = 245
-        if playerX >= 600:  # 490
-            playerX = 600
+        if playerX >= 490: 
+            playerX = 490
 
         # calls the player data
         player(playerX, playerY)
