@@ -1,8 +1,13 @@
 import random
-import sched
-import time
 from pygame_functions import *
 import simpleaudio as sa
+
+"""
+ This is my first game in python, it's very basic. The only goal is to avoid hitting
+ the moving traffic as you speed faster and faster. 
+ 
+  Credits for car-3/car-4 https://icons8.com/icons/set/car-top-view 
+  """
 
 
 def main():
@@ -10,7 +15,7 @@ def main():
     game_intro()
 
 
-# initialize pygame and fonts
+# initialize pygame and default font
 pygame.init()
 font = pygame.font.Font('freesansbold.ttf', 32)
 
@@ -38,7 +43,10 @@ player_img = pygame.image.load('transport.png')
 
 # temporary objects image
 # TODO: update image add other objects
-obstacle_image = player_img
+obstacle_image = pygame.image.load('car-4.png')
+obstacle_image = pygame.transform.rotate(obstacle_image, 90)
+# second_obstacle = pygame.image.load('car-3.png')
+# second_obstacle = pygame.transform.rotate(second_obstacle, 90)
 
 # Create an empty array
 obstacle_list = []
@@ -56,7 +64,7 @@ def obstacle():
     # Loop 3 times and add a snow flake in a random x,y position
     for i in range(0, 3):
         # variables for obstacles
-        spawn_cords = [253, 323, 408, 483]
+        spawn_cords = [253, 323, 408, 480]
         num = random.randint(0, 3)
         obstacleX = spawn_cords[num]
         obstacleY = 0
@@ -106,7 +114,7 @@ def run_game():
     speed = 1
 
     # the frequency the cars spawn at
-    spawn_rate = 125
+    spawn_rate = 200
 
     # run the window until it's told to exit
     running = True
@@ -140,7 +148,7 @@ def run_game():
         """   
          # set the speed to increase per 10 seconds (1px increase)
          # Also, each time this is true, we will spawn cars at a higher
-         # Frequency
+         # Frequency. 
          """
         speed_increase = pygame.time.get_ticks()
         if speed_increase >= x and counter != 1:
@@ -152,10 +160,9 @@ def run_game():
                 speed += 1
             # reset speed and frequency of spawns if program resets, because of stacks, easiest way
             reset = len(obstacle_list)
-            print(reset)
             if reset <= 3:
                 speed = 2
-                spawn_rate = 125
+                spawn_rate = 200
 
         # calls the function to spawn cars and moves the y value of the cars
         for k in range(len(obstacle_list)):
@@ -174,7 +181,7 @@ def run_game():
         # boundaries for player
         if playerX <= 245:
             playerX = 245
-        if playerX >= 490: 
+        if playerX >= 490:
             playerX = 490
 
         # calls the player data
