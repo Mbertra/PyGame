@@ -42,7 +42,7 @@ background_img2 = pygame.image.load('grass.jpg')
 player_img = pygame.image.load('transport.png')
 
 # temporary objects image
-# TODO: update image add other objects
+# TODO: add other objects
 obstacle_image = pygame.image.load('car-4.png')
 obstacle_image = pygame.transform.rotate(obstacle_image, 90)
 # second_obstacle = pygame.image.load('car-3.png')
@@ -61,7 +61,7 @@ def player(x, y):
 
 # spawns obstacles, called from run_game()
 def obstacle():
-    # Loop 3 times and add a snow flake in a random x,y position
+    # Loop 3 times and add cars to list
     for i in range(0, 3):
         # variables for obstacles
         spawn_cords = [253, 323, 408, 480]
@@ -88,7 +88,7 @@ def game_intro():
                     run_game()
 
 
-# find out if there is a collision
+# find out if there is a collision TODO: possibly replace with mask
 def is_collision(obstacleY, playerY, obstacleX, playerX):
     distance = math.sqrt((math.pow(obstacleX - playerX, 2)) + (math.pow(playerY - obstacleY, 2)))
     if distance < 50:
@@ -111,10 +111,10 @@ def run_game():
     x = 20000
 
     # the speed that the cars move at
-    speed = 1
+    speed = 3
 
     # the frequency the cars spawn at
-    spawn_rate = 200
+    spawn_rate = 125
 
     # run the window until it's told to exit
     running = True
